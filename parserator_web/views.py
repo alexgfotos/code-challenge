@@ -6,9 +6,6 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.exceptions import ParseError
 from django.http import JsonResponse
 
-addr = "215 N norton ave tucson az 85719"
-print(usaddress.tag(addr))
-
 
 class Home(TemplateView):
     template_name = 'parserator_web/index.html'
@@ -23,9 +20,6 @@ class AddressParse(APIView):
         print(addressComponents)
         # This will call the parse method when request is sent from the index.html form    
        
-        # TODO: Flesh out this method to parse an address string using the
-        # parse() method and return the parsed components to the frontend.
-        # 
         return Response(addressComponents)
 
     def parse(self, address):
