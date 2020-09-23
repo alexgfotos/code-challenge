@@ -24,10 +24,12 @@
         <h4>Parsing results</h4>
         <p>Address type: <strong><span id="parse-type"></span></strong></p>
         <table class="table table-bordered">
-          <thead>
+          <div id="test"></div>
+          <thead id="results-table">
             <tr>
-              <th>Address part</th>
-              <th>Tag</th>
+              <th id="address-part">Address part</th>
+              <th id="address-tag">Tag</th>
+              
             </tr>
           </thead>
           <tbody>
@@ -47,19 +49,55 @@
   // Function for dumping the JSON content for each button into the div
   function submitAddress() {
 
-    
-    var address = $("#address").val();
-    var queryURL = "api/parse?address=" + address 
 
-      $.ajax({
-        url: queryURL,
-        method: "GET"
-      }).then(function (response) {
-        // alert(response)
-        console.log(response)
-        $("#parse-type").append(JSON.stringify(response));
-        $("#address-results").show()
+    var address = $("#address").val();
+    var queryURL = "api/parse?address=" + address
+
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function (response) {
+      // alert(response)
+      console.log(response)
+      $("#address-results").show()
+      $("#parse-type").append(JSON.stringify(response[1]))
+
+      // create doc fragments for each piece of the table
+      let tableFragment = document.createDocumentFragment();
+      // let partsFragment = document.createDocumentFragment();
+      
+
+      // let addressParts = document.createElement('th');
+      // let tags = document.createElement('th');
+      
+
+      Object.keys(response[0]).map(entry => {
+
+        let tableRow = document.createElement('tr');
+        let addressPart = document.createElement('td');
+        let tag = document.createElement('td');
+        
+
+        addressPart.textContent = entry;
+        tag.textContent = response[0][entry];
+
+        
+
+        // addressParts.append(addressPart);
+        // tags.append(tag);
+        tableRow.append(tag)
+        tableRow.append(addressPart)
+        tableFragment.appendChild(tableRow)
+
       });
+
+      // tagFragment.append(tags);
+      // partsFragment.append(addressParts)
+
+      document.querySelector('#results-table').append(tableFragment);
+      // document.querySelector('#address-tag').append(partsFragment);
+
+    });
     console.log(address)
   }
 

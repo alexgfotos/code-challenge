@@ -19,7 +19,7 @@ class AddressParse(APIView):
 
     def get(self, request): 
         query = request.GET.get('address')
-        addressComponents = usaddress.parse(query)
+        addressComponents = usaddress.tag(query)
         print(addressComponents)
         # This will call the parse method when request is sent from the index.html form    
        
