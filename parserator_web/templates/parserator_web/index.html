@@ -54,15 +54,14 @@
       .then(response => response.json())
       .then(data => appendDom(data));
   }
-
+  // function to reveal hidden html and append results from GET request
   function appendDom(data) {
     document.querySelector("#address-results").style.display = "block"
     document.querySelector("#parse-type").append(data[1])
-
     // create doc fragment for  the table
     let tableFragment = document.createDocumentFragment();
 
-    // // Map the addressComponenets array to separate tag from part and append into table data and then into table row
+    //Map the addressComponenets array to separate tag from part and append into table data and then into table row
     Object.keys(data[0]).map(entry => {
 
       let tableRow = document.createElement('tr');
@@ -83,7 +82,7 @@
     document.querySelector('#results-table').append(tableFragment);
 
   }
-
+  // Clear the results from the previous search
   function clearList() {
     document.querySelector("#results-table").innerHTML = "";
     document.querySelector("#parse-type").innerHTML = "";
