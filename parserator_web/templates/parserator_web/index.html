@@ -42,59 +42,54 @@
 
 {% block extra_js %}
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
 
   // Function for making the GET request to ParseAddress view
   function submitAddress() {
 
+    const address = document.querySelector("#address").value;
+    const queryURL = "api/parse?address=" + address
 
-    var address = $("#address").val();
-    var queryURL = "api/parse?address=" + address
+    fetch(queryURL)
+      .then(response => response.json())
+      .then(data => appendDom(data));
+  }
 
-    $.ajax({
-      url: queryURL,
-      method: "GET"
-    }).then(function (response) {
-      console.log(response)
-      $("#address-results").show()
-      $("#parse-type").append(JSON.stringify(response[1]))
+  function appendDom(data) {
+    document.querySelector("#address-results").style.display = "block"
+    document.querySelector("#parse-type").append(data[1])
 
-      // create doc fragment for  the table
-      let tableFragment = document.createDocumentFragment();
-  
-      // Map the addressComponenets array to separate tag from part and append into table data and then into table row
-      Object.keys(response[0]).map(entry => {
+    // create doc fragment for  the table
+    let tableFragment = document.createDocumentFragment();
 
-        let tableRow = document.createElement('tr');
-        let addressPart = document.createElement('td');
-        let tag = document.createElement('td');
-      
-        addressPart.textContent = entry;
-        tag.textContent = response[0][entry];
+    // // Map the addressComponenets array to separate tag from part and append into table data and then into table row
+    Object.keys(data[0]).map(entry => {
 
-        tableRow.append(tag)
-        tableRow.append(addressPart)
-        // append all as children of table fragment
-        tableFragment.appendChild(tableRow)
+      let tableRow = document.createElement('tr');
+      let addressPart = document.createElement('td');
+      let tag = document.createElement('td');
 
-      });
+      addressPart.textContent = entry;
+      tag.textContent = data[0][entry];
 
-      
-      // append table fragment into existing html
-      document.querySelector('#results-table').append(tableFragment);
-      
+      tableRow.append(tag)
+      tableRow.append(addressPart)
+      //   // append all as children of table fragment
+      tableFragment.appendChild(tableRow)
 
     });
-    // console.log(address)
+
+    // append table fragment into existing html
+    document.querySelector('#results-table').append(tableFragment);
+
   }
 
   function clearList() {
-    $("#results-table").empty()
-    $("#parse-type").empty()
+    document.querySelector("#results-table").innerHTML = "";
+    document.querySelector("#parse-type").innerHTML = "";
   }
 
-  $("#submit").click(function () {
+  document.querySelector("#submit").addEventListener("click", () => {
     event.preventDefault()
     clearList()
     submitAddress();
