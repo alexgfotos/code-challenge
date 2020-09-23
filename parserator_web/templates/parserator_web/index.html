@@ -49,18 +49,22 @@
 
     
     var address = $("#address").val();
-    var queryURL = "api/parse/" + address +
+    var queryURL = "api/parse?address=" + address 
 
       $.ajax({
         url: queryURL,
         method: "GET"
       }).then(function (response) {
-        console.log("response");
+        // alert(response)
+        console.log(response)
+        $("#parse-type").append(JSON.stringify(response));
+        $("#address-results").show()
       });
     console.log(address)
   }
 
   $("#submit").click(function () {
+    event.preventDefault()
     submitAddress();
   });
 
