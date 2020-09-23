@@ -27,9 +27,8 @@
           <div id="test"></div>
           <thead id="results-table">
             <tr>
-              <th id="address-part">Address part</th>
-              <th id="address-tag">Tag</th>
-              
+              <th>Address part</th>
+              <th>Tag</th>
             </tr>
           </thead>
           <tbody>
@@ -46,7 +45,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
 
-  // Function for dumping the JSON content for each button into the div
+  // Function for making the GET request to ParseAddress view
   function submitAddress() {
 
 
@@ -57,56 +56,49 @@
       url: queryURL,
       method: "GET"
     }).then(function (response) {
-      // alert(response)
       console.log(response)
       $("#address-results").show()
       $("#parse-type").append(JSON.stringify(response[1]))
 
-      // create doc fragments for each piece of the table
+      // create doc fragment for  the table
       let tableFragment = document.createDocumentFragment();
-      // let partsFragment = document.createDocumentFragment();
-      
-
-      // let addressParts = document.createElement('th');
-      // let tags = document.createElement('th');
-      
-
+  
+      // Map the addressComponenets array to separate tag from part and append into table data and then into table row
       Object.keys(response[0]).map(entry => {
 
         let tableRow = document.createElement('tr');
         let addressPart = document.createElement('td');
         let tag = document.createElement('td');
-        
-
+      
         addressPart.textContent = entry;
         tag.textContent = response[0][entry];
 
-        
-
-        // addressParts.append(addressPart);
-        // tags.append(tag);
         tableRow.append(tag)
         tableRow.append(addressPart)
+        // append all as children of table fragment
         tableFragment.appendChild(tableRow)
 
       });
 
-      // tagFragment.append(tags);
-      // partsFragment.append(addressParts)
-
+      
+      // append table fragment into existing html
       document.querySelector('#results-table').append(tableFragment);
-      // document.querySelector('#address-tag').append(partsFragment);
+      
 
     });
-    console.log(address)
+    // console.log(address)
+  }
+
+  function clearList() {
+    $("#results-table").empty()
+    $("#parse-type").empty()
   }
 
   $("#submit").click(function () {
     event.preventDefault()
+    clearList()
     submitAddress();
   });
-
-    // Function for displaying movie data
 
 </script>
 {% endblock %}
